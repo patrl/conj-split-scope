@@ -1,0 +1,412 @@
+\documentclass[cronos]{ling-paper}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{
+  font=footnotesize,
+  singlelinecheck=false,
+  justification = centering,
+  labelformat = parens,
+  position = top,
+  belowskip = 10pt
+}
+\addbibresource[location=remote]{/home/patrl/repos/bibliography/elliott_mybib.bib}
+
+\title{Continuation semantics and the split-scope signature}
+\subtitle{A note on Hirsch's (2017) argument that type-flexibility is insufficient}
+
+\input{acronyms}
+\renewcommand*{\acsfont}[1]{\textsc{#1}}
+
+\author{Patrick D.\,Elliott\\Massachusetts Institute of Technology}
+
+\usepackage{appendix,float}
+
+\begin{document}
+
+\maketitle
+
+\citet{hirschThesis} argues that \textit{split scope} readings of conjunction
+can't be properly accounted for by positing a type-flexible meaning for
+\textit{and}, and conversely that \ac{cr} \textit{must} be available in order to
+account for the relevant data. In this note, we show that this argument doesn't
+go through -- concretely, \citeauthor{barker2002}'s analysis of conjunction
+within \textit{continuation semantics} (see also \citealt[chapter
+7]{barkerShan2015}) \textit{predicts} the split-scope signature, by virtue of
+independently motivated type-shifting operations.
+
+\section{Hirsch's argument}
+
+Hirsch's argument revolves around the sentence in (\ref{hirsch1}). The key
+observation is that (\ref{hirsch1}) has a reading which entails that there are
+two things that John refused to do: (i) \textit{visit any city in Europe} and
+(ii) \textit{visit any city in Asia}. Under this reading, \textit{and} scopes
+above \textit{refuse}, but the material in each conjunct must scope below
+\textit{refuse}, since each conjunct contains an \ac{npi} licensed by \textit{refuse}.
+
+\ex \textsc{The split-scope signature}\\
+John refused to visit any city in Europe and any city in
+Asia.\label{hirsch1}\hfill(\citealt[p.\,90]{hirschThesis})\\
+\phantom{,}\hfill $\wedge > \ml{refuse} > \ml{any}$
+\xe
+
+\citeauthor{hirschThesis} characterizes the \enquote{split-scope signature} as
+follows:\footnote{As noted by \citeauthor{hirschThesis}, \citet{parteeRooth}
+  already recognized the possibility split-scope readings of \textit{dis}junction.}
+
+\ex
+\textit{And} scopes above some operator, which the apparent \ac{dp} conjuncts
+scope below.
+\xe
+
+\citeauthor{hirschThesis}'s account of the split-scope signature is to derive
+(\ref{hirsch1}) from the \ac{lf} in (\ref{hirsch-lf}), via deletion mechanisms.
+The details are unimportant for our purposes, but it should be clear enough how
+the \ac{lf} in (\ref{hirsch-lf}), if available, accounts for the split-scope signature:
+
+\ex
+John $λ x$ $\begin{aligned}[t]
+  &\text{[\sub{\&P} [\sub{$v$P$_{1}$} $x$ refused [ any city in Europe
+    $\lambda y$ \textsc{pro} to visit $y$]}\\
+  &\text{and [\sub{$v$P$_{2}$} $x$ refused [ any city in Asia $λ z$ \textsc{pro}
+    to visit $z$]]]]}
+  \end{aligned}$\label{hirsch-lf}
+\xe
+
+\citeauthor{hirschThesis} shows in detail that the following denotation for
+\textit{and} (a special case of \citeauthor{parteeRooth}'s
+\citeyear{parteeRooth} recursive definition) can't capture this reading, on the
+assumption that (\ref{hirsch1}) in fact involves \ac{qp} conjunction:
+
+\ex
+$\eval{and\sub{Q}} ≔ λQ₁Q₂P . Q₁ P ∧ Q₂ P$\hfill$\type{((e → t) → t) → ((e → t) → t) → (e → t) → t}$
+\xe
+
+\section{Enter \textit{continuations}}
+
+\subsection{Background}
+
+\citeauthor{hirschThesis}'s argument takes the standard-bearer for a
+type-flexible theory of conjunction to be \citeauthor{parteeRooth}'s recursive
+definition. Subsequently, however, a generalization of
+\citeauthor{parteeRooth}'s account has been proposed by \citet{barker2002} and
+\citet{barkerShan2015} within the framework of \textit{continuation semantics}.
+Continuation semantics provides a perspective on scope-taking that generalizes
+\citeauthor{montague1973}'s account of quantification, taking inspiration from
+work in computer science on using delimited continuations to model control flow
+(see, e.g., \citealt{danvyFilinski1992,wadler1994}). For our purposes,
+continuation semantics amounts to the following conjecture: composition of
+\textit{scopal} meanings is accomplished \textit{in-situ}, mediated by three
+type-flexible operations -- \textit{lift} ($↑$), \textit{lower} ($↓$), and
+\ac{cfa} ($\ml{S}$).
+
+The definitions of lift/lower are straightforward, so we provide those first.
+Lift, defined in (\ref{def:lift}), is simply a type-flexible version of \citeauthor{partee1986}'s
+(\citeyear{partee1986}) Montague Lift. Lower, defined in (\ref{def:lower}) is
+simply an instruction to feed a function $m$ the identity function over
+truth-values as its argument. In a continuized fragment, the role of lift is to
+allow non-scope-takers to compose with scope-takers, and the role of lower is to
+get an ordinary value back from a scopal value.
+
+\pex
+\a Lift (def)\\
+$a^{↑}  ≔ λ k . k a$\hfill$↑:\type{a → (a → t) → t}$\label{def:lift}
+\a Lower (def)\\
+$m^{↓} ≔ m (λx . x)$\hfill$↓:\type{((t → t) → t) → t}$\label{def:lower}
+\xe
+
+The definition of continuized \ac{cfa} is a little more complicated. Informally,
+(\ref{cfa}) says that \ac{cfa} takes a \textit{scopal} function and a
+\textit{scopal} argument (in either order), unwraps the contained values and
+performs \ac{fa} on them, while sequencing the quantificational parts from left-to-right.
+
+\ex
+\acf{cfa} (def.)\\
+$m \ml{S} n ≔ λ k . m (λ x . n (λ y . k (x \ml{A} y)))$\\
+\phantom{,}\hfill$\ml{S}:\begin{aligned}[t]
+  &\type{(((a → b) → t) → t) → ((a → t) → t) → (b → t) → t}\\
+  &\type{((a → t) → t) → (((a → b) → t) → t) → (b → t) → t}
+  \end{aligned}$\label{cfa}
+\xe
+
+\todo[inline]{Show how this deals with quantifiers}
+
+\subsection{Conjunction in continuation semantics}
+
+Within continuation semantics, conjunction receives an extremely natural
+definition, given in (\ref{def:conj}); \textit{and} takes two scope-takers as
+$m$ and $n$, and a \textit{continuation argument} $k$, and feeds $k$ into $m$
+and $n$. As shown in detail by \citeauthor{barker2002} this subsumes all of the
+cases covered by \citeauthor{parteeRooth}'s generalized conjunction.
+
+\ex
+Conjunction in continuation semantics (def.)\\
+$\eval{and} ≔ λ mnk . n k ∧ m k$\hfill$\type{((a → t) → t) → ((a → t) → t) → (a → t) → t}$
+\xe
+
+Note that, in the following, we'll abbreviate types of the form
+$\type{(a → t) → t}$ as follows:
+
+\ex
+$\type{C a ≔ (a → t) → t}$
+\xe
+
+
+
+\todo[inline]{Give some examples}
+
+\subsection{Accounting for the split-scope signature}
+
+Continuation semantics accounts for the split-scope signature straightforwardly,
+on the assumption that quantifiers can themselves be lifted (this is
+independently necessary to account for inverse scope readings). We'll make a number of simplifying assumptions
+here, but nothing in the analysis will crucially hinge upon them. For example,
+we'll treat \ac{npi} \textit{any} simply as an existential quantifier, which is
+licensed as long as it takes scope within the argument of \textit{refuse}.
+
+The first step is to lift \textit{any European city} and \textit{any Asian
+  city}, returning two higher-order scope-takers. Since \textit{and} can conjoin
+anything scopal, it can conjoin the resulting meanings. The result is shown in
+the figure below:
+
+\begin{figure}[H]
+  \centering
+  \caption{Lift the \acp{npi} and conjoin}
+\begin{forest}
+  [{$λ l . l (λ k₂ . ∃y[ \ml{european-city} ∧ k₂ y])) ∧ l (λ k₁ . ∃x[\ml{asian-city} ∧ k₁ x])$\\\ac{fa}},draw=red
+    [{$λ l . l (λ k₂ . ∃y[ \ml{european-city} ∧ k₂ y])$}
+    [{$λ k₂ . ∃y[ \ml{european-city} ∧ k₂ y]$},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}} [{any European city},roof]]]
+    [{\acs{fa}}
+      [{and}]
+      [{$λ l . l (λ k₁ . ∃x[\ml{asian-city} ∧ k₁ x])$}
+      [{$λ k₁ . ∃x[\ml{asian-city} ∧ k₁ x]$},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}} [{any Asian city},roof]]]
+    ]
+  ]
+\end{forest}
+\end{figure}
+
+The result of conjoining the lifted \acp{npi} is a higher-order scope taker. In
+order to get this to compose with the rest of the embedded clause, we lift
+\textit{visit} twice, and do higher-order \ac{cfa}. Informally, the result is
+that the semantic contribution of \textit{visit} is distributed between the two
+conjunctions. Next, we \textit{internally lower} the result, in order to set the
+scope of the \acp{npi}.
+
+\begin{figure}[H]
+  \centering
+  \caption{Compose the embedded clause and internally lower}
+  \begin{forest}
+    [{$λ l . \begin{aligned}[t]
+        &l (∃y[ \ml{european-city} ∧ \ml{visit} y]))\\
+        &∧ l (∃x[\ml{asian-city} ∧ \ml{visit} x])
+        \end{aligned}$},draw=red
+    [{...}
+    [{\textsc{pro}$^{↑₂}$}]
+    [{$λ l . \begin{aligned}[t]
+        &l (λ k₂ . ∃y[ \ml{european-city} ∧ k₂ (\ml{visit} y)]))\\
+        &∧ l (λ k₁ . ∃x[\ml{asian-city} ∧ k₁ (\ml{visit} x)])
+        \end{aligned}$\\$⊛$}
+      [{visit$^{\uparrow_{2}}$}]
+      [{$λ l . \begin{aligned}[t]
+          &l (λ k₂ . ∃y[ \ml{european-city} ∧ k₂ y]))\\
+          &∧ l (λ
+          k₁ . ∃x[\ml{asian-city} ∧ k₁ x])
+          \end{aligned}$},fill=yellow]
+    ]]]
+  \end{forest}
+\end{figure}
+
+Now we compose the result with \texit{refuse} and the subject via \ac{sfa}, and lower the result.
+
+\begin{figure}[H]
+\centering
+\caption{Compose the matrix clause and lower}
+\begin{forest}
+  [{$\ml{j refuse} ∃y[ \ml{european-city} ∧ \ml{j visit} y] ∧ ∃x[\ml{asian-city} ∧ \ml{visit} x]$},draw=red
+  [{$⊛$}
+    [{John$^{↑}$}]
+    [{$⊛$}
+      [{refuse$^{\uparrow}$}]
+      [{$λ l . l (∃y[ \ml{european-city} ∧ \ml{visit} y])) ∧ l (∃x[\ml{asian-city} ∧ \ml{visit} x])$},fill=yellow]
+    ]
+  ]]
+\end{forest}
+\end{figure}
+
+Zooming out, the graph of the semantic computation is given below:
+
+\begin{figure}[H]
+  \centering
+  \begin{forest}
+    [{$\type{t}$}
+    [{$\type{C t}$},edge label={node[midway,left,font=\scriptsize]{$↓$}}
+      [{John$^{↑}$}]
+      [{$\type{C (e → t)}$}
+        [{refused$^{↑}$}]
+        [{$\type{C t}$}
+        [{$\type{C (C t)}$},edge label={node[midway,left,font=\scriptsize]{$↓↓$}}
+          [{\textsc{pro}}]
+          [{$\type{C (C (e → t))}$\\$⊛$}
+            [{$\type{C (C (e → e → t))}$\\visit$^{↑}$}]
+            [{$\type{C (C e)}$}
+              [{$\type{C (C e)}$} [{any European city},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+              [{$\type{C (C e) → C (C e)}$}
+                [{$\type{C a → C a → C a}$\\and}]
+                [{$\type{C (C e)}$} [{any Asian city},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+              ]
+            ]
+          ]
+        ]
+        ]
+      ]
+    ]]
+  \end{forest}
+\end{figure}
+
+It's worth noting that \citet{hirschThesis} does briefly consider and ultimately
+dismiss a similar solution, which involves type-lifting the \acp{npi}, and
+allowing \acs{qr} of the resulting complex quantifier formed by
+\textit{and}\sub{Q} to leave behind a higher type (i.e., a quantificational
+trace), thus giving rise to semantic reconstruction. \citeauthor{hirschThesis}
+ultimately rejects this solution, on the basis that such a derivation
+disentangles syntactic position and scope, which has been argued to be
+undesirable based on evidence that semantic reconstruction of a moved expression
+feeds condition C. This consideration is completely irrelevant here, since
+scope-taking does not logically entail \textit{movement} in continuation semantics.
+
+\subsection{An unattested scope reading}
+
+\ex
+Some company hired a maid and a cook.\hfill\cmark $∃ > ∧$; \xmark $∧ > ∃$
+\xe
+
+\section{\textit{Only} and the split-scope signature}
+
+\citet{hirschThesis} makes a parallel argument for split-scope for pre-DP
+\textit{only}, intended to rule out the possibility that \textit{only} can
+compose directly with a DP. The examples \citeauthor{hirschThesis} considers are
+those like the following:
+
+\ex
+You're only required to read three books.\hfill $\ml{only} > ◻ > ∃$
+\xe
+
+In this section, I'll show that the analysis of
+\textit{and} in continuation semantics (\citealt{barker2002}, \citealt[chapter 7]{barkerShan2015}), which involves re-executing a continuation, can be extended in a reasonably
+straightforward fashion to \textit{only}, thus accounting for the
+cross-categorial nature of \textit{only}, and \textit{predicting} split-scope by
+virtue of the availability of \textit{lift}.
+
+\subsection{Generalized \textit{only}}
+
+% \ex
+% $\ml{F} a ≔ (a,\set{a'|a' ∈ \ml{alt} a})$
+% \xe
+
+% \pex
+% \a $a^{π} ≔ (a,\set{a})$
+% \a
+% $(x,\mathbb{x}) \ml{R} (y,\mathbb{y}) ≔ (x \ml{A} y,\set{x \ml{A} y|x ∈ \mathbb{x}, y ∈ \mathbb{y}})$
+% \xe
+%
+Let's assume that \textit{three\sub{F} papers} denotes a pair, consisting of its
+ordinary semantic value, and its focus-semantic value.
+
+\ex
+$\eval{three\sub{F} papers} = \left(\begin{aligned}[c]
+    &λ k . ∃X[|X| = 3 ∧ \ml{papers} X],\\
+    &\set{λ k . ∃X[|X| = n ∧ \ml{papers} X] | n ∈ \mathbb{N}}
+    \end{aligned}\right)$\hfill$\type{\ml{F} (C a)}$
+\xe
+
+We can analyze \textit{only} as looking for a scope-taker associated with some
+alternatives, and returning a scope-taker.
+
+\ex
+$\ml{only} (m,\mathbb{m}) ≔ λ k . m k ∧ ∀m' ∈ \mathbb{m}[(m k ↛ m' k) → ¬ (m' k)]$\\
+\phantom{,}\hfill$\type{F (C a) → C a}$
+\xe
+
+% \begin{figure}[H]
+%   \centering
+% \caption{\texttt{fmap} lift through the focus applicative}
+% \begin{forest}
+%   [{$\left(\begin{aligned}[c]
+%     &λl . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]),\\
+%     &\set{λ l . l (λ k . ∃X[|X| = n ∧ \ml{papers} X ∧ k X]) | n ∈ \mathbb{N}}
+%     \end{aligned}\right)$},draw=red
+%     [{...} [{three\sub{F} papers}]]
+%   ]
+% \end{forest}
+% \end{figure}
+
+% \begin{figure}[H]
+%   \centering
+%   \caption{Compose with \textit{only}}
+%   \begin{forest}
+%     [{$λ l . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X]) ∧ ∀m' ∈ \ml{alts}[(l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]) ↛ m' l) → ¬ (m' l)]$},draw=red
+%       [{only}]
+%       [{$\left(\begin{aligned}[c]
+%     &λl . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]),\\
+%     &\set{λ l . l (λ k . ∃X[|X| = n ∧ \ml{papers} X] ∧ k X) | n ∈ \mathbb{N}}
+%     \end{aligned}\right)$},fill=yellow]
+%     ]
+%   \end{forest}
+% \end{figure}
+
+% \begin{figure}[H]
+%   \centering
+%   \caption{Compose embedded clause, and internally lower}
+%   \begin{forest}
+%     [{$λ l . l (∃X[|X| = 3 ∧ \ml{papers} X ∧ \ml{you read} X]) ∧ ∀m' ∈ \ml{alts}[(l (∃X[|X| = 3 ∧ \ml{papers} X ∧ \ml{you read} X]) ↛ m' l) → ¬ (m' l)]$}
+%     [{$λ l . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k (\ml{you read} X)]) ∧ ∀m' ∈ \ml{alts}[(l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X]) ↛ m' l) → ¬ (m' l)]$\\$\ml{S}_{2}$}
+%       [{you$^{\uparrow_{2}}$}]
+%       [{$\ml{S}_{2}$}
+%         [{read$^{↑_{2}}$}]
+%         [{$λ l . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]) ∧ ∀m' ∈
+%           \ml{alts}[(l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]) ↛ m' l) → ¬ (m' l)]$},fill=yellow]
+%       ]
+%     ]
+%     ]
+%   \end{forest}
+% \end{figure}
+
+\begin{figure}[H]
+  \centering
+  \caption{Graph of the derivation}
+  \begin{forest}
+    [{$\type{t}$}
+    [{$\type{C t}$},edge label={node[midway,left,font=\scriptsize]{$\downarrow$}}
+      [{$\type{C (C (t → t))}$\\require$^\uparrow$}]
+      [{$\type{C t}$}
+      [{$\type{C (C t)}$},edge label={node[midway,left,font=\scriptsize]{$\intLower$}}
+        [{$\type{C (C e)}$\\you$^{↑₂}$}]
+        [{$\type{C (C (e → t))}$}
+          [{$\type{C (C (e → e → t))}$\\read$^{↑₂}$}]
+          [{$\type{C (C e)}$}
+            [{$\type{F (C a) → C a}$\\only}]
+            [{$\type{F (C (C e))}$} [{$\type{F (C e)}$},edge label={node[midway,left,font=\scriptsize]{$\mathtt{fmap} \uparrow$}} [{three\sub{F} books},roof]]]
+          ]
+        ]
+      ]
+    ]]]
+  \end{forest}
+\end{figure}
+
+\ex
+$\begin{aligned}[t]
+  &□ ∃X[|X| = 3 ∧ \ml{books} X ∧ \ml{you read} X]\\
+  &∧ ∀p ∈ \ml{alts}[((□ ∃X[|X| = 3 ∧ \ml{books} X ∧ \ml{you read} X]) ↛ p) → ¬ p]\end{aligned}$
+\xe
+
+\printbibliography
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% TeX-master: t
+%%% End:
+
+% LocalWords:  Keny Niedzielski Schwarzchild Yasu Sudo
