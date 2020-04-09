@@ -296,18 +296,90 @@ straightforward fashion to \textit{only}, thus accounting for the
 cross-categorial nature of \textit{only}, and \textit{predicting} split-scope by
 virtue of the availability of \textit{lift}.
 
-\subsection{Generalized \textit{only}}
+\subsection{Compositional focus semantics}
 
-% \ex
-% $\ml{F} a ≔ (a,\set{a'|a' ∈ \ml{alt} a})$
-% \xe
+Here, we make concrete our assumptions concerning the consequences of
+\textsc{f}-marking for the compositional semantics. We'll mostly follow \citet{Rootha}, but with a slightly
+different compositional regime, inspired by \cite[chapter 5]{Charlowc}. We'll
+assume that semantic values are \textit{pairs}, consisting of the (a) the
+ordinary-semantic value, and (b) the focus-semantic value. This is captured by
+the focus type-constructor $\type{F}$, given in (\ref{def:foc}). Some example
+focus semantic values are given in (\ref{ex:foc}).\footnote{We use the
+  metalanguage function $\ml{alt}$ here as a \enquote{black box}, intended to
+  stand in for your favorite theory of alternatives.
 
-% \pex
-% \a $a^{π} ≔ (a,\set{a})$
-% \a
-% $(x,\mathbb{x}) \ml{R} (y,\mathbb{y}) ≔ (x \ml{A} y,\set{x \ml{A} y|x ∈ \mathbb{x}, y ∈ \mathbb{y}})$
-% \xe
-%
+  On this way of compositionalizing Roothian focus semantics, it's even possible
+  to assign the focus feature \textsc{f} a denotation directly:
+
+  \ex
+  $\eval{\textsc{f}} ≔ λ x . (x,\set{x'| x' ∈ \ml{alt} x})$\hfill$\type{a → F a}$
+  \xe
+
+  Although we abstract away from the details, composition in this framework can
+  proceed by lifting non-{\sc f}-marked things into pairs, where the
+  focus-semantic value is just a singleton set, and composition proceeds via
+  \ac{fa} of the ordinary-semantic values, and \ac{pfa} of the focus-semantic
+  values. See \cite[chapter 5]{Charlowc}
+}
+
+\ex
+$\type{F a ≔ (a, \set{a})}$\label{def:foc}
+\xe
+
+\pex\label{ex:foc}
+\a $\eval{John} = (\ml{j},\set{j})$\hfill$\type{F e}$
+\a
+$\eval{John\sub{F}} = (\ml{j}, \set{x | x ∈ \ml{alt} \ml{j}})$\hfill$\type{F e}$
+\a
+$\eval{[\sub{VP} hug John\sub{F} ]} = (λ y . y \ml{hug j}, \set{λ y . y \ml{hug} x | x ∈ \ml{alt} \ml{j}})$\hfill$\type{F (e → t)}$
+\xe
+
+On this compositionalization, it's natural to treat \textit{only} as seeking a
+\textit{scope-taker} associated with some alternatives, and returning a plain
+scope-taker.\footnote{
+\todo[inline]{Something about how we abstract away here from the presupposition
+  vs. assertion of only sentences}} We give the denotation we assume for
+\textit{only} in (\ref{def:only}):
+
+\ex
+$\ml{only} (m,\mathbb{m}) ≔ λ k . m k ∧ ∀m' ∈ \mathbb{m}[(m k ↛ m' k) → ¬ (m' k)]$\\
+\phantom{,}\hfill$\type{F (C a) → C a}$\label{def:only}
+\xe
+
+n order to feed \textit{only} in the kind of meanings it's looking for, we'll
+need to lift \textit{lift}, introduced in the previous section, into a function
+on pairs or \textsc{o}-semantic and \textsc{o}-semantic values.
+
+\ex
+$(x,𝕪)^{↑_{F}} ≔ (x^{↑},\set{y^{↑} | y ∈ 𝕪})$
+\xe
+
+Let's now see how this entry for \textit{only} derives its flexibility:
+
+\pex
+\a Mary hugged only \textsc{John}.\label{ex:flex1}
+\a Mary only hugged \textsc{John}.\label{ex:flex2}
+\xe
+
+Concentrating on (\ref{ex:flex1}), the derivation proceeds quite
+straightforwardly -- first, the \textsc{f}-marked DP \textit{John} is lifted
+into a scope-taker.
+
+\begin{figure}[H]
+  \centering
+\caption{hello}
+\begin{forest}
+  [{...}
+    [{only}]
+    [{$\left(\semtower{[]}{\ml{j}},\Set{\semtower{[]}{\ml{x}} | x ∈ \ml{alt} \ml{j}}\right)$}
+    [{$(\ml{j},\set{x|x ∈ \ml{alt} \ml{j}})$\\John\sub{F}}]]
+  ]
+  \end{forest}
+\end{figure}
+
+
+\subsection{Split scope}
+
 Let's assume that \textit{three\sub{F} papers} denotes a pair, consisting of its
 ordinary semantic value, and its focus-semantic value.
 
@@ -318,7 +390,7 @@ $\eval{three\sub{F} papers} = \left(\begin{aligned}[c]
     \end{aligned}\right)$\hfill$\type{\ml{F} (C a)}$
 \xe
 
-We can analyze \textit{only} as looking for a scope-taker associated with some
+We can analyze \textit{only} as looking for a scope-taker associated with some (scopal)
 alternatives, and returning a scope-taker.
 
 \ex
@@ -326,49 +398,9 @@ $\ml{only} (m,\mathbb{m}) ≔ λ k . m k ∧ ∀m' ∈ \mathbb{m}[(m k ↛ 
 \phantom{,}\hfill$\type{F (C a) → C a}$
 \xe
 
-% \begin{figure}[H]
-%   \centering
-% \caption{\texttt{fmap} lift through the focus applicative}
-% \begin{forest}
-%   [{$\left(\begin{aligned}[c]
-%     &λl . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]),\\
-%     &\set{λ l . l (λ k . ∃X[|X| = n ∧ \ml{papers} X ∧ k X]) | n ∈ \mathbb{N}}
-%     \end{aligned}\right)$},draw=red
-%     [{...} [{three\sub{F} papers}]]
-%   ]
-% \end{forest}
-% \end{figure}
+I
+\subsection{Deriving split scope}
 
-% \begin{figure}[H]
-%   \centering
-%   \caption{Compose with \textit{only}}
-%   \begin{forest}
-%     [{$λ l . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X]) ∧ ∀m' ∈ \ml{alts}[(l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]) ↛ m' l) → ¬ (m' l)]$},draw=red
-%       [{only}]
-%       [{$\left(\begin{aligned}[c]
-%     &λl . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]),\\
-%     &\set{λ l . l (λ k . ∃X[|X| = n ∧ \ml{papers} X] ∧ k X) | n ∈ \mathbb{N}}
-%     \end{aligned}\right)$},fill=yellow]
-%     ]
-%   \end{forest}
-% \end{figure}
-
-% \begin{figure}[H]
-%   \centering
-%   \caption{Compose embedded clause, and internally lower}
-%   \begin{forest}
-%     [{$λ l . l (∃X[|X| = 3 ∧ \ml{papers} X ∧ \ml{you read} X]) ∧ ∀m' ∈ \ml{alts}[(l (∃X[|X| = 3 ∧ \ml{papers} X ∧ \ml{you read} X]) ↛ m' l) → ¬ (m' l)]$}
-%     [{$λ l . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k (\ml{you read} X)]) ∧ ∀m' ∈ \ml{alts}[(l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X]) ↛ m' l) → ¬ (m' l)]$\\$\ml{S}_{2}$}
-%       [{you$^{\uparrow_{2}}$}]
-%       [{$\ml{S}_{2}$}
-%         [{read$^{↑_{2}}$}]
-%         [{$λ l . l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]) ∧ ∀m' ∈
-%           \ml{alts}[(l (λ k . ∃X[|X| = 3 ∧ \ml{papers} X ∧ k X]) ↛ m' l) → ¬ (m' l)]$},fill=yellow]
-%       ]
-%     ]
-%     ]
-%   \end{forest}
-% \end{figure}
 
 \begin{figure}[H]
   \centering
