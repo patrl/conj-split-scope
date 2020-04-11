@@ -11,7 +11,7 @@
 }
 \addbibresource[location=remote]{/home/patrl/repos/bibliography/elliott_mybib.bib}
 
-\title{Continuation semantics and the split-scope signature}
+\title{Scopal composition and the split-scope signature}
 \subtitle{A note on Hirsch's (2017) argument that type-flexibility is insufficient}
 
 \input{acronyms}
@@ -363,17 +363,37 @@ Let's now see how this entry for \textit{only} derives its flexibility:
 
 Concentrating on (\ref{ex:flex1}), the derivation proceeds quite
 straightforwardly -- first, the \textsc{f}-marked DP \textit{John} is lifted
-into a scope-taker.
+into pair consisting of lifted \textit{John}, and lifted alternatives to \textit{John}.
 
 \begin{figure}[H]
   \centering
-\caption{hello}
+\caption{Composition of \enquote{only \textsc{John}}}
 \begin{forest}
-  [{...}
+  [{$λ k . k \ml{j} ∧ ∀Q ∈ \Set{λ l . l x | x ∈ \ml{alt} \ml{j}}[(k \ml{j} ↛ Q k) → ¬ (Q k)]$},fill=yellow
     [{only}]
-    [{$\left(\semtower{[]}{\ml{j}},\Set{\semtower{[]}{\ml{x}} | x ∈ \ml{alt} \ml{j}}\right)$}
+    [{$\left(\ml{j}^{↑},\Set{x^{↑} | x ∈ \ml{alt} \ml{j}}\right)$}
     [{$(\ml{j},\set{x|x ∈ \ml{alt} \ml{j}})$\\John\sub{F}}]]
   ]
+  \end{forest}
+\end{figure}
+
+Now that we have a scope-taker of type $\type{C e}$, composition of the rest of
+the sentence proceeds straightforwardly -- \textit{lower} evaluates the scope of
+\textit{only} at the sentential level.
+
+\begin{figure}[H]
+  \centering
+  \caption{Scoping out \enquote{only \textsc{John}}}
+  \begin{forest}
+    [{...}
+    [{$λ k . k (\ml{m hug j}) ∧ ∀Q ∈ \Set{λ l . l (\ml{m hug }x) | x ∈ \ml{alt} \ml{j}}[(k (\ml{m hug j}) ↛ (Q k) → ¬ (Q k)]$\\$⊛$}
+      [{Mary$^{↑}$}]
+      [{$⊛$}
+        [{hug$^{↑}$}]
+        [{$λ k . k \ml{j} ∧ ∀Q ∈ \Set{λ l . l x | x ∈ \ml{alt} \ml{j}}[(k \ml{j} ↛ Q k) → ¬ (Q k)]$},fill=yellow]
+      ]
+    ]
+    ]
   \end{forest}
 \end{figure}
 
