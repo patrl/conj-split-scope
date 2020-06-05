@@ -11,7 +11,8 @@
 }
 \addbibresource[location=remote]{/home/patrl/repos/bibliography/elliott_mybib.bib}
 
-\title{Scopal composition and the split-scope signature}
+\title{Continuation semantics\\
+  and the split-scope signature}
 \subtitle{A note on Hirsch's (2017) argument that type-flexibility is insufficient}
 
 \input{acronyms}
@@ -29,7 +30,7 @@
 can't be properly accounted for by positing a type-flexible meaning for
 \textit{and}, and conversely that \ac{cr} \textit{must} be available in order to
 account for the relevant data. In this note, we show that this argument doesn't
-go through -- concretely, \citeauthor{barker2002}'s analysis of conjunction
+go through, once we look beyond a movement-oriented theory of scope-taking -- concretely, \citeauthor{barker2002}'s (\citeyear{barker2002}) analysis of conjunction
 within \textit{continuation semantics} (see also \citealt[chapter
 7]{barkerShan2015}) \textit{predicts} the split-scope signature, by virtue of
 independently motivated type-shifting operations.
@@ -43,9 +44,9 @@ two things that John refused to do: (i) \textit{visit any city in Europe} and
 above \textit{refuse}, but the material in each conjunct must scope below
 \textit{refuse}, since each conjunct contains an \ac{npi} licensed by \textit{refuse}.
 
-\ex \textsc{The split-scope signature}\\
-John refused to visit any city in Europe and any city in
-Asia.\label{hirsch1}\hfill(\citealt[p.\,90]{hirschThesis})\\
+\ex
+John refused to visit [any city in Europe] and [any city in
+Asia].\label{hirsch1}\hfill(\citealt[p.\,90]{hirschThesis})\\
 \phantom{,}\hfill $\wedge > \ml{refuse} > \ml{any}$
 \xe
 
@@ -53,9 +54,9 @@ Asia.\label{hirsch1}\hfill(\citealt[p.\,90]{hirschThesis})\\
 follows:\footnote{As noted by \citeauthor{hirschThesis}, \citet{parteeRooth}
   already recognized the possibility split-scope readings of \textit{dis}junction.}
 
-\ex
+\ex \textsc{The split-scope signature}\\
 \textit{And} scopes above some operator, which the apparent \ac{dp} conjuncts
-scope below.
+scope below.\hfill\citep[90]{hirschThesis}
 \xe
 
 \citeauthor{hirschThesis}'s account of the split-scope signature is to derive
@@ -81,6 +82,68 @@ assumption that (\ref{hirsch1}) in fact involves \ac{qp} conjunction:
 $\eval{and\sub{Q}} ≔ λQ₁Q₂P . Q₁ P ∧ Q₂ P$\hfill$\type{((e → t) → t) → ((e → t) → t) → (e → t) → t}$
 \xe
 
+Of particular interest to us, is that \citeauthor{hirschThesis} considers (and
+ultimately dismisses), a derivation of the split scope reading involving
+\textit{semantic reconstruction}. The \ac{lf} is sketched in figure \ref{fig:sem-recon}. Achieving split-scope via semantic reconstruction relies on some key assumptions: (i) the \acp{qp} can be type-lifted (via Montague \textsc{lift}) prior to conjunction, (ii) \ac{qr} can leave behind a higher-type ($\type{(e → t) → t}$) intermediate trace.
+
+\begin{figure}[H]
+  \centering
+\caption{Split-scope via semantic reconstruction}\label{fig:sem-recon}
+\begin{forest}
+  [{$\begin{aligned}[t]
+      &\ml{j refuse} (∃x[\ml{city-in-eu} ∧ \ml{j visit }x])\\
+      &∧ \ml{j refuse} (∃y[\ml{city-in-asia} y ∧ \ml{j visit }y])
+      \end{aligned}$}
+  [{$λ f . \begin{aligned}[t]
+      &f ((λ P . ∃x[\ml{city-in-eu} x]))\\
+      &∧ f (λ P . ∃y[\ml{city-in-asia} y])
+      \end{aligned}$}
+    [{$λ f . f (λ P . ∃x[\ml{city-in-eu} x])$} [{any city in Europe$^{↑}$},roof]]
+    [{...}
+      [{and}]
+      [{$λ f . f (λ P . ∃y[\ml{city-in-asia} y])$} [{any city in Asia$^↑$},roof]]
+    ]
+  ]
+  [{$λ Q . \ml{j refused} (Q (λ x . \ml{j visit }x))$}
+    [{$λ Q$}]
+    [{...}
+      [{John}]
+      [{...}
+        [{refused}]
+        [{...}
+          [{$Q$}]
+          [{...}
+            [{$λ x$}]
+            [{...}
+              [{\textsc{pro} visit $t_{x}$},roof]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+  ]
+\end{forest}
+\end{figure}
+
+Since \citeauthor{hirschThesis} is working in a framework in which
+scope-taking entails \textit{movement}, \citeauthor{hirschThesis} argues that
+this mechanism should be independently ruled out, since semantic reconstruction
+doesn't seem to be available in the absence of syntactic reconstruction.
+Evidence for this comes from the fact that, when an A-moved constituent
+reconstructs for scope, it necessarily also syntactically reconstructs, as
+diagnosed by condition C effects (see \citealt{romero1998}).\todo{Add the other
+  references here.}
+
+\pex
+\a{}[A new theory by him$_{1}$] seems to Quine$_{1}$ [\_\_ to be needed].
+\a\ljudge{*}{}[A new theory by Quine$_{1}$] seems to him$_{1}$ [\_\_ to be needed].\\
+\phantom{,}\hfill(\citealt[p.\,95]{hirschThesis})
+\xe
+
+The argument against this derivation only goes through if scope-taking
+necessarily involves syntactic movement. In the next section, we'll overview a prominent theory of scope taking -- \textit{continuation semantics} -- where this scope-taking doesn't necessitate movement.
+
 \section{Enter \textit{continuations}}
 
 \subsection{Background}
@@ -97,11 +160,11 @@ work in computer science on using delimited continuations to model control flow
 continuation semantics amounts to the following conjecture: composition of
 \textit{scopal} meanings is accomplished \textit{in-situ}, mediated by three
 type-flexible operations -- \textit{lift} ($↑$), \textit{lower} ($↓$), and
-\ac{cfa} ($\ml{S}$).
+\ac{sfa} ($\ml{S}$).
 
 The definitions of lift/lower are straightforward, so we provide those first.
 Lift, defined in (\ref{def:lift}), is simply a type-flexible version of \citeauthor{partee1986}'s
-(\citeyear{partee1986}) Montague Lift. Lower, defined in (\ref{def:lower}) is
+(\citeyear{partee1986}) Montague \textsc{lift}. Lower, defined in (\ref{def:lower}) is
 simply an instruction to feed a function $m$ the identity function over
 truth-values as its argument. In a continuized fragment, the role of lift is to
 allow non-scope-takers to compose with scope-takers, and the role of lower is to
@@ -111,24 +174,53 @@ get an ordinary value back from a scopal value.
 \a Lift (def)\\
 $a^{↑}  ≔ λ k . k a$\hfill$↑:\type{a → (a → t) → t}$\label{def:lift}
 \a Lower (def)\\
-$m^{↓} ≔ m (λx . x)$\hfill$↓:\type{((t → t) → t) → t}$\label{def:lower}
+$m^{↓} ≔ m \ml{id}$\hfill$↓:\type{((t → t) → t) → t}$\label{def:lower}
 \xe
 
-The definition of continuized \ac{cfa} is a little more complicated. Informally,
-(\ref{cfa}) says that \ac{cfa} takes a \textit{scopal} function and a
+The definition of \ac{sfa} is a little more complicated. Informally,
+(\ref{cfa}) says that \ac{sfa} takes a \textit{scopal} function and a
 \textit{scopal} argument (in either order), unwraps the contained values and
-performs \ac{fa} on them, while sequencing the quantificational parts from left-to-right.
+performs \ac{fa} on them, while sequencing the quantificational parts from left-to-right.\footnote{The careful reader will notice that $\ml{S}$ in (\ref{cfa}) has \textit{two} type-signatures. This is because the $\ml{S}$ is defined in terms of vanilla \acf{fa} -- $\ml{A}$. As in \cite{heimKratzer1998}, $\ml{A}$ is overloaded in order to account for the possibility that the function appear to the left of its argument or vice versa.
+}
 
 \ex
-\acf{cfa} (def.)\\
-$m \ml{S} n ≔ λ k . m (λ x . n (λ y . k (x \ml{A} y)))$\\
+\acf{sfa} (def.)\\
+$m \ml{S} n ≔ λ k . m (λ x . n (λ y . k (x \ml{A} y)))$\\
 \phantom{,}\hfill$\ml{S}:\begin{aligned}[t]
-  &\type{(((a → b) → t) → t) → ((a → t) → t) → (b → t) → t}\\
-  &\type{((a → t) → t) → (((a → b) → t) → t) → (b → t) → t}
+  &\ml{S}: \type{(((a → b) → t) → t) → ((a → t) → t) → (b → t) → t}\\
+  &\ml{S}: \type{((a → t) → t) → (((a → b) → t) → t) → (b → t) → t}
   \end{aligned}$\label{cfa}
 \xe
 
-\todo[inline]{Show how this deals with quantifiers}
+A \ac{qp} such as \textit{every boy} in object position may compose \textit{in-situ} via \ac{sfa}; non-scope-takers must be systematically lifted. The scope of the \ac{qp} is evaluated by saturating the continuation argument with the identity function (lower). This is illustrated for the simple sentence \enquote{Mary likes every boy} in figure \ref{fig:cont1}. The type of the \enquote{contained} value is highlighted -- on an intuitive level, continuation-semantic composition involves surrounding meanings with additional scopal scaffolding, in order to allow them to play nicely with scope-takers.
+
+\begin{figure}[H]
+\centering
+\caption{In-situ composition in continuation semantics: \enquote{Mary likes every boy}}\label{fig:cont1}
+\begin{forest}
+  [{$∀b[\ml{m likes} b]$}
+  [{$∀b[\ml{id} (\ml{m likes} b)]$},edge label={node[midway,left,font=\scriptsize]{equiv.}}
+  [{$λ k . ∀b[k (\ml{m likes} b)]$\\$\ml{S}$},edge label={node[midway,left,font=\scriptsize]{$↓$}}
+    [{$λ k . k \ml{m}$} [{Mary},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+    [{$λ k . ∀b[k (λ y . y \ml{likes} b)]$\\$\ml{S}$}
+      [{$λ k . k \ml{likes}$} [{likes},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+      [{$λ k . ∀b[k b]$} [{every boy},roof]]
+    ]
+  ]]]
+\end{forest}
+%
+\begin{forest}
+  [{$\type{t}$}
+    [{$\type{(\hl{t} → t) → t}$\\$\ml{S}$},edge label={node[midway,left,font=\scriptsize]{$↓$}}
+      [{$\type{(\hl{e} → t) → t}$} [{$\type{\hl{e}}$},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+      [{$\type{(\hl{(e → t)} → t) → t}$\\$\ml{S}$}
+        [{$\type{(\hl{(e → e → t)} → t) → t}$} [{$\type{\hl{e → e → t}}$},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+        [{$\type{(\hl{e} → t) → t}$}]
+      ]
+    ]
+  ]
+\end{forest}
+\end{figure}
 
 \subsection{Conjunction in continuation semantics}
 
@@ -140,24 +232,52 @@ cases covered by \citeauthor{parteeRooth}'s generalized conjunction.
 
 \ex
 Conjunction in continuation semantics (def.)\\
-$\eval{and} ≔ λ mnk . n k ∧ m k$\hfill$\type{((a → t) → t) → ((a → t) → t) → (a → t) → t}$
+$\eval{and} ≔ λ mnk . n k ∧ m k$\hfill$\type{((a → t) → t) → ((a → t) → t) → (a → t) → t}$\label{def:conj}
 \xe
 
-Note that, in the following, we'll abbreviate types of the form
-$\type{(a → t) → t}$ as follows:
+In continuation semantics, the types we're dealing with will very quickly become rather unwieldy. In order to address this purely notational issue, we'll abbreviate scopal types as in (\ref{scopal-type}). This means that we can alternatively write the type signature for conjunction as $\type{C a → C a → C a}$.
 
 \ex
-$\type{C a ≔ (a → t) → t}$
+$\type{C a ≔ (a → t) → t}$\label{scopal-type}
 \xe
 
+It's obvious the entry for \textit{and} in (\ref{def:conj}) will be able to account for \ac{qp} conjunction. We briefly show how it accounts for, e.g., proper name and predicate conjunction in figure \ref{fig:conj-examples}. In general, unless the coordinands are scope-takers, they must first be lifted before composing with \textit{and} via vanilla \ac{fa}.
 
-
-\todo[inline]{Give some examples}
+\begin{figure}[H]
+  \centering
+\caption{Proper name conjunction (\enquote{John and Mary left})and predicate conjunction (\enquote{John swan and ran}).}\label{fig:conj-examples}
+\begin{forest}
+  [{$\ml{left j} ∧ \ml{left m}$}
+  [{$λ k . k (\ml{left j}) ∧ k (\ml{left m})$\\$\ml{S}$},edge label={node[midway,left,font=\scriptsize]{$↓$}}
+  [{$λ k . k \ml{j} ∧ k \ml{m}$\\$\ml{A}$}
+    [{$λ k . k \ml{j}$} [{John},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+    [{$\ml{A}$}
+      [{and}]
+      [{$λ k . k \ml{m}$} [{Mary},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+    ]
+  ]
+    [{$λ k . k (λx . \ml{left} x)$} [{left},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+  ]]
+\end{forest}
+%
+\begin{forest}
+  [{$\ml{swam j} ∧ \ml{ran j}$}
+  [{$λk . k (\ml{swam j}) ∧ k (\ml{ran j})$\\$\ml{S}$},edge label={node[midway,left,font=\scriptsize]{$↓$}}
+    [{$λk . k \ml{j}$} [{John},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+    [{$λ k . k (λ x . \ml{swam} x) ∧ k (λx . \ml{ran} x)$\\$\ml{A}$}
+      [{$λ k . k (λ x . \ml{swam} x)$} [{swam},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+      [{$\ml{A}$}
+        [{and}]
+        [{$λ k . k (λx . \ml{ran} x)$} [{ran},edge label={node[midway,left,font=\scriptsize]{$\uparrow$}}]]
+      ]
+    ]
+  ]]
+\end{forest}
+\end{figure}
 
 \subsection{Accounting for the split-scope signature}
 
-Continuation semantics accounts for the split-scope signature straightforwardly,
-on the assumption that quantifiers can themselves be lifted (this is
+Now that we understand how continuation semantics handles coordination, we're in a position to see how it accounts for the split-scope signature straightforwardly, without positing movement. As with the putative \ac{lf} involving semantic reconstruction, the crucial step will be to allow \acp{qp} to be lifted (this is
 independently necessary to account for inverse scope readings). We'll make a number of simplifying assumptions
 here, but nothing in the analysis will crucially hinge upon them. For example,
 we'll treat \ac{npi} \textit{any} simply as an existential quantifier, which is
@@ -186,7 +306,7 @@ the figure below:
 
 The result of conjoining the lifted \acp{npi} is a higher-order scope taker. In
 order to get this to compose with the rest of the embedded clause, we lift
-\textit{visit} twice, and do higher-order \ac{cfa}. Informally, the result is
+\textit{visit} twice, and do higher-order \ac{sfa}. Informally, the result is
 that the semantic contribution of \textit{visit} is distributed between the two
 conjunctions. Next, we \textit{internally lower} the result, in order to set the
 scope of the \acp{npi}.
@@ -369,7 +489,7 @@ into pair consisting of lifted \textit{John}, and lifted alternatives to \textit
   \centering
 \caption{Composition of \enquote{only \textsc{John}}}
 \begin{forest}
-  [{$λ k . k \ml{j} ∧ ∀Q ∈ \Set{λ l . l x | x ∈ \ml{alt} \ml{j}}[(k \ml{j} ↛ Q k) → ¬ (Q k)]$},fill=yellow
+  [{$λ k . k \ml{j} ∧ ∀Q ∈ \Set{x^{↑} | x ∈ \ml{alt} \ml{j}}[(k \ml{j} ↛ Q k) → ¬ (Q k)]$},fill=yellow
     [{only}]
     [{$\left(\ml{j}^{↑},\Set{x^{↑} | x ∈ \ml{alt} \ml{j}}\right)$}
     [{$(\ml{j},\set{x|x ∈ \ml{alt} \ml{j}})$\\John\sub{F}}]]
@@ -385,18 +505,36 @@ the sentence proceeds straightforwardly -- \textit{lower} evaluates the scope of
   \centering
   \caption{Scoping out \enquote{only \textsc{John}}}
   \begin{forest}
-    [{...}
-    [{$λ k . k (\ml{m hug j}) ∧ ∀Q ∈ \Set{λ l . l (\ml{m hug }x) | x ∈ \ml{alt} \ml{j}}[(k (\ml{m hug j}) ↛ (Q k) → ¬ (Q k)]$\\$⊛$}
+    [{$\ml{m hug j} ∧ ∀ p ∈ \set{\ml{m hug x}|x ∈ \ml{alt} \ml{j}}[(\ml{m hug j} ↛ \ml{m hug }x) → ¬ (\ml{m hug })x]$}
+    [{$\ml{m hug j} ∧ ∀ Q ∈ \set{(\ml{m hug }x)^{↑}|x ∈ \ml{alt} j}[(\ml{m hug j} ↛ Q^{↓}) → ¬ (Q^{↓})]$}
+    [{$λ k . k (\ml{m hug j}) ∧ ∀Q ∈ \Set{(\ml{m hug }x)^{↑} | x ∈ \ml{alt} \ml{j}}[(k (\ml{m hug j}) ↛ (Q k) → ¬ (Q k)]$\\$⊛$}
       [{Mary$^{↑}$}]
       [{$⊛$}
         [{hug$^{↑}$}]
-        [{$λ k . k \ml{j} ∧ ∀Q ∈ \Set{λ l . l x | x ∈ \ml{alt} \ml{j}}[(k \ml{j} ↛ Q k) → ¬ (Q k)]$},fill=yellow]
+        [{$λ k . k \ml{j} ∧ ∀Q ∈ \Set{x^↑ | x ∈ \ml{alt} \ml{j}}[(k \ml{j} ↛ Q k) → ¬ (Q k)]$},fill=yellow]
       ]
     ]
-    ]
+    ]]
   \end{forest}
 \end{figure}
 
+The derivation of (\ref{ex:flex2}) procedes in a completely parallel fashion -- \textsc{John} introduces focus alternatives; the \ac{vp} is lifted before it composes with \textit{only}.
+
+\begin{figure}[H]
+ \centering
+\caption{Composition of \acs{vp} \textit{only}}
+\begin{forest}
+  [{}
+  [{$⊛$}
+    [{Mary$^{↑}$}]
+    [{\ac{fa}}
+      [{only}]
+      [{$((λ y . y \ml{hug} j)^{↑}, \set{(λ y . y \ml{hug} x)^{↑}|x ∈ \ml{alt} \ml{j}})$} [{$(λ y . y \ml{hug} j, \set{λ y . y \ml{hug} x | x ∈ \ml{alt j}})$} [{hug John\sub{F}},roof]]]
+    ]
+  ]
+  ]
+\end{forest}
+\end{figure}
 
 \subsection{Split scope}
 

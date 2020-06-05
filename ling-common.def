@@ -96,6 +96,7 @@
 \NewDocumentCommand\type{m}{\ensuremath{\mathsf{#1}}}
 
 \NewDocumentCommand\ml{m}{\ensuremath{\textsf{#1}}}
+\NewDocumentCommand\hl{m}{\textcolor{red}{#1}}
 
 \NewDocumentCommand\dmroot{m}{\ensuremath{\sqrt{\text{#1}}}}
 
